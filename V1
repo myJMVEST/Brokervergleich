@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JMVEST Brokervergleich</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Inter', sans-serif;
+    background: #f9fafb;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background: linear-gradient(90deg, #f5f7f8, #f5f7f8);
+    color: #134e2d;
+    padding: 1rem 2rem;
+    text-align: center;
+    border-bottom: 4px solid #f5f7f8;
+}
+header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+}
+.container {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+}
+label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+select, button {
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 0.3rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+button {
+    background: #22c55e;
+    color: white;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: background 0.3s;
+}
+button:hover {
+    background: #16a34a;
+}
+.loader {
+    border: 5px solid #d0f8d6;
+    border-top: 5px solid #22c55e;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 2rem auto;
+    display: none;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.broker-card {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    
+}
+.match-bar-container {
+    background: #eee;
+    border-radius: 0.5rem;
+    width: 100%;
+    height: 12px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+.match-bar-fill {
+    height: 100%;
+    border-radius: 0.5rem;
+    transition: width 0.5s;
+}
+
+.broker-card img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    margin-right: 1rem;
+}
+.broker-card h3 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+}
+.affiliate-link {
+    background: #22c55e;
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+}
+.affiliate-link:hover {
+    background: #16a34a;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <br>
+    <h1>🚀 JMVEST Brokervergleich</h1>
+   
+</header>
+<p style="text-align:center;">Finde in Sekunden einen Broker, der perfekt zu dir passt.</p>
+<div class="container">
+    <form id="broker-form">
+
+        <label>👤 Erfahrung:</label>
+        <select name="experience">
+            <option value="beginner">Anfänger</option>
+            <option value="intermediate">Fortgeschritten</option>
+            <option value="expert">Experte</option>
+        </select>
+
+        <label>📈 Produkte:</label>
+        <select name="products">
+            <option value="stocks">Aktien</option>
+            <option value="etf">ETFs</option>
+            <option value="crypto">Krypto</option>
+            <option value="options">Optionen</option>
+            <option value="all">Alles</option>
+        </select>
+
+        <label>💰 Automatischer Steuerabzug?</label>
+        <select name="tax">
+            <option value="yes">Ja</option>
+            <option value="no">Nein</option>
+        </select>
+
+        <label>🛡️ Regulierung:</label>
+        <select name="regulation">
+            <option value="strict">Streng</option>
+            <option value="moderate">Mittel</option>
+            <option value="low">Locker</option>
+        </select>
+
+        <label>📱 Mobile App benötigt?</label>
+        <select name="mobileApp">
+            <option value="yes">Ja</option>
+            <option value="no">Nein</option>
+        </select>
+
+        <label>☎️ Support-Erreichbarkeit:</label>
+        <select name="support">
+            <option value="24/7">24/7</option>
+            <option value="business-hours">Geschäftszeiten</option>
+        </select>
+
+        <label>💳 Zahlungsmethoden:</label>
+        <select name="paymentMethods">
+            <option value="sepa">SEPA</option>
+            <option value="creditcard">Kreditkarte</option>
+            <option value="paypal">PayPal</option>
+            <option value="all">Alle</option>
+        </select>
+
+        <label>🌍 Handelsplätze:</label>
+        <select name="marketplaces">
+            <option value="global">Global</option>
+            <option value="eu">EU</option>
+            <option value="de">Deutschland</option>
+        </select>
+
+        <label>👌 Benutzerfreundlichkeit:</label>
+        <select name="usability">
+            <option value="easy">Einfach</option>
+            <option value="medium">Mittel</option>
+            <option value="advanced">Erweitert</option>
+        </select>
+
+        <label>📊 Anzahl Produkte:</label>
+        <select name="productCount">
+            <option value="few">Wenige</option>
+            <option value="many">Viele</option>
+        </select>
+
+        <label>⭐ Kundenzufriedenheit:</label>
+        <select name="customerSatisfaction">
+            <option value="high">Hoch</option>
+            <option value="medium">Mittel</option>
+        </select>
+
+        <button type="submit">🚀 Broker finden</button>
+    </form>
+
+    <div id="loader" class="loader"></div>
+    <div id="results"></div>
+</div>
+
+<script>
+const brokers = [
+    {
+        name: "Trade Republic",
+        description: "Einfacher mobiler Handel mit Aktien und ETFs.",
+        logo: "https://zeitundwert.de/wp-content/uploads/traderepublic-logo.jpg",
+        affiliateLink: "https://affiliate.traderepublic.com",
+        products: ["stocks", "etf", "crypto", "all"],
+        mobileApp: "yes",
+        tax: "yes",
+        regulation: "strict",
+        experience: "beginner",
+        support: "business-hours",
+        paymentMethods: "sepa",
+        marketplaces: "de",
+        usability: "easy",
+        productCount: "many",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "Scalable Capital",
+        description: "ETF-Sparpläne und Aktien günstig handeln.",
+        logo: "https://play-lh.googleusercontent.com/4O_Bmd1yiyTSWQPgBtV0xDY7n7Jht7ds3m1ZtT4_6MEYi7dgpjZ8JeqmMvl6rgu1Blc=w240-h480-rw",
+        affiliateLink: "https://affiliate.scalable.capital",
+        products: ["stocks", "etf", "all"],
+        mobileApp: "yes",
+        tax: "yes",
+        regulation: "strict",
+        experience: "intermediate",
+        support: "business-hours",
+        paymentMethods: "sepa",
+        marketplaces: "de",
+        usability: "easy",
+        productCount: "many",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "eToro",
+        description: "Social Trading mit Aktien, ETFs und Krypto.",
+        logo: "https://play-lh.googleusercontent.com/GAF_66TZ8YC8OTBEKF5cueh1UI9_EGKud4yY9olL6_tVYasb88Knx2z7YopD8pW3SPc",
+        affiliateLink: "https://affiliate.etoro.com",
+        products: ["stocks", "etf", "crypto", "options", "all"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "moderate",
+        experience: "beginner",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "global",
+        usability: "easy",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Plus500",
+        description: "CFD Broker mit weltweitem Zugang zu Märkten.",
+        logo: "https://s3-eu-west-1.amazonaws.com/tpd/logos/4bdca36a000064000505e284/0x0.png",
+        affiliateLink: "https://affiliate.plus500.com",
+        products: ["stocks", "etf", "crypto", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "moderate",
+        experience: "intermediate",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "global",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Finanzen.net Zero",
+        description: "ETFs, Aktien, Kryptos übersichtliche App Deutscher Broker BaFin-Regulierung Automatische Steuerabführung",
+          logo: "https://play-lh.googleusercontent.com/zFXb9Z24KQYchyKeU6pboBYVs3n9lruofrUO-eWaRzxwJreBLOF83cJDJXLvIOeuBX6O",
+        affiliateLink: "https://affiliate.finanzenzero.de",
+        products: ["stocks", "etf"],
+        mobileApp: "yes",
+        tax: "yes",
+        regulation: "strict",
+        experience: "beginner",
+        support: "business-hours",
+        paymentMethods: "sepa",
+        marketplaces: "de",
+        usability: "easy",
+        productCount: "few",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "Interactive Brokers",
+        description: "Globale Plattform für aktive Trader.",
+        logo: "https://s3-eu-west-1.amazonaws.com/tpd/logos/597c8ceb0000ff0005a7af84/0x0.png",
+        affiliateLink: "https://www.interactivebrokers.com",
+        products: ["stocks", "etf", "options", "all"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "expert",
+        support: "24/7",
+        paymentMethods: "sepa",
+        marketplaces: "global",
+        usability: "advanced",
+        productCount: "many",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "DEGIRO",
+        description: "Günstiger Aktienhandel mit großem Angebot.",
+        logo: "https://play-lh.googleusercontent.com/j5CuJUMDomv3ZpzbM5HLxNKdlaDmCjEYfOtbzHI8redmXC7AHrisd_4S2RcGwW3yhw",
+        affiliateLink: "https://affiliate.degiro.com",
+        products: ["stocks", "etf", "options", "all"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "intermediate",
+        support: "business-hours",
+        paymentMethods: "sepa",
+        marketplaces: "eu",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Robinhood",
+        description: "Beliebter US-Broker mit einfacher App.",
+        logo: "https://play-lh.googleusercontent.com/gdh_yiRr-u_xS1o76iOBpDp5-6l_qnvAAmD_Ft3KUFPSYdYZNEQT-rmPcFV2YaPSEhE",
+        affiliateLink: "https://www.robinhood.com",
+        products: ["stocks", "etf", "crypto", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "moderate",
+        experience: "beginner",
+        support: "business-hours",
+        paymentMethods: "creditcard",
+        marketplaces: "usa",
+        usability: "easy",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Charles Schwab",
+        description: "Großer US-Broker mit starkem Support.",
+        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Charles_Schwab_Corporation_logo.svg/1200px-Charles_Schwab_Corporation_logo.svg.png",
+        affiliateLink: "https://www.schwab.com",
+        products: ["stocks", "etf", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "intermediate",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "usa",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "Fidelity",
+        description: "USA-Broker mit großem Angebot und Support.",
+        logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPqH2CMC1VO0PEIX8JRyh-u9USpMD99JpL1Q&s",
+        affiliateLink: "https://www.fidelity.com",
+        products: ["stocks", "etf", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "intermediate",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "usa",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "TD Ameritrade",
+        description: "US-Broker mit professionellen Tools.",
+        logo: "https://static.cdnlogo.com/logos/t/33/td-ameritrade-thumb.png",
+        affiliateLink: "https://www.tdameritrade.com",
+        products: ["stocks", "etf", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "expert",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "usa",
+        usability: "advanced",
+        productCount: "many",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "IG",
+        description: "UK-basierter Broker mit großem CFD-Angebot.",
+        logo: "https://a.c-dn.net/c/etc.clientlibs/settings/wcm/designs/onedomain/1752644861000/clientlibs_resources/resources/images/og_image.jpg",
+        affiliateLink: "https://www.ig.com",
+        products: ["stocks", "etf", "crypto", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "intermediate",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "global",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Saxo Bank",
+        description: "Dänischer Broker mit globaler Reichweite.",
+        logo: "https://play-lh.googleusercontent.com/LHYaBIktBqHVEPPuY2_7009mvy57gMWQEJk2Izzk2BRaTYwc9n7eLN_idJk_LYCeT0g",
+        affiliateLink: "https://www.home.saxo",
+        products: ["stocks", "etf", "crypto", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "expert",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "global",
+        usability: "advanced",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "XTB",
+        description: "CFD und Forex Broker aus Europa.",
+        logo: "https://play-lh.googleusercontent.com/YGhVx8pdB0SCT1PFhGysBxSZmD4WM6Ca4uPORcG2myfx86jatXeySbPjDlrqbEshtTPL=s256-rw",
+        affiliateLink: "https://www.xtb.com",
+        products: ["stocks", "etf", "crypto", "options"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "strict",
+        experience: "intermediate",
+        support: "24/7",
+        paymentMethods: "creditcard",
+        marketplaces: "global",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Freedom24",
+        description: "Aktienhandel mit Zugang zu IPOs.",
+        logo: "https://play-lh.googleusercontent.com/q7smmyApH2peS_zw6UO-W8ztRelny58S3SA-Q4_kSYIfqqKOhF1_uj0yG1PA6PNtJfs",
+        affiliateLink: "https://www.freedom24.com",
+        products: ["stocks", "etf"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "moderate",
+        experience: "intermediate",
+        support: "business-hours",
+        paymentMethods: "creditcard",
+        marketplaces: "global",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Smartbroker",
+        description: "Günstiger deutscher Broker für Aktien & ETFs.",
+        logo: "https://play-lh.googleusercontent.com/UmbxW4fmxxW6xOm5XKDC0LWBz5KfH558a0IM8b326nCy-R5n_DbXQy_DfmfPbq_RWXZx=w240-h480-rw",
+        affiliateLink: "https://www.smartbroker.de",
+        products: ["stocks", "etf", "all"],
+        mobileApp: "no",
+        tax: "yes",
+        regulation: "strict",
+        experience: "intermediate",
+        support: "business-hours",
+        paymentMethods: "sepa",
+        marketplaces: "de",
+        usability: "medium",
+        productCount: "many",
+        customerSatisfaction: "high"
+    },
+    {
+        name: "Trading 212",
+        description: "UK-Broker mit provisionsfreiem Handel.",
+        logo: "https://play-lh.googleusercontent.com/HZZC2xPWtLqR3JmmjnMvcIO6gXjChEt3ugU2GpSyLqnVI9KP6cyCsWV9MnYCR_ZmPBfy",
+        affiliateLink: "https://www.trading212.com",
+        products: ["stocks", "etf", "crypto"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "moderate",
+        experience: "beginner",
+        support: "business-hours",
+        paymentMethods: "creditcard",
+        marketplaces: "uk",
+        usability: "easy",
+        productCount: "many",
+        customerSatisfaction: "medium"
+    },
+    {
+        name: "Revolut",
+        description: "Banking App mit Aktien- und Kryptohandel.",
+        logo: "https://play-lh.googleusercontent.com/bo7Qeq8XZVI4hyXTVyG7Oi3hMiqADqruYeyQWqzzJzNHCYNVLmpAne0XP4_JH2AJ1tE=w240-h480-rw",
+        affiliateLink: "https://www.revolut.com",
+        products: ["stocks", "crypto"],
+        mobileApp: "yes",
+        tax: "no",
+        regulation: "moderate",
+        experience: "beginner",
+        support: "business-hours",
+        paymentMethods: "creditcard",
+        marketplaces: "uk",
+        usability: "easy",
+        productCount: "few",
+        customerSatisfaction: "medium"
+    }
+];
+
+document.getElementById("broker-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    const loader = document.getElementById("loader");
+    loader.style.display = "block";
+    const results = document.getElementById("results");
+    results.innerHTML = "";
+
+    setTimeout(() => {
+        const formData = new FormData(e.target);
+        const userPreferences = {};
+        formData.forEach((value, key) => userPreferences[key] = value);
+
+        const totalFields = Object.keys(userPreferences).length;
+        const maxScore = totalFields * 10;
+
+        const scoredBrokers = brokers.map(broker => {
+            let score = 0;
+            for (const key in userPreferences) {
+                if (Array.isArray(broker[key]) ? broker[key].includes(userPreferences[key]) : broker[key] === userPreferences[key]) {
+                    score += 10;
+                }
+            }
+            return { broker, score };
+        });
+
+        scoredBrokers.sort((a, b) => b.score - a.score);
+        const topBrokers = scoredBrokers.slice(0, 5);
+
+        topBrokers.forEach(item => {
+            const card = document.createElement("div");
+            card.className = "broker-card";
+            const matchPercent = Math.round((item.score / maxScore) * 100);
+           let barColor;
+if (matchPercent < 60) {
+    barColor = "#ef4444"; // rot
+} else if (matchPercent < 80) {
+    barColor = "#facc15"; // gelb
+} else {
+    barColor = "#22c55e"; // grün
+}
+
+card.innerHTML = `
+    <img src="${item.broker.logo}" alt="${item.broker.name}">
+    <div>
+        <h3>${item.broker.name}</h3>
+        <p>${item.broker.description}</p>
+        <p><strong>Übereinstimmung:</strong> ${matchPercent}%</p>
+        <div class="match-bar-container">
+            <div class="match-bar-fill" style="width: ${matchPercent}%; background: ${barColor};"></div>
+        </div>
+        <a class="affiliate-link" href="${item.broker.affiliateLink}" target="_blank">Jetzt registrieren 🚀</a>
+    </div>`;
+            results.appendChild(card);
+        });
+
+        loader.style.display = "none";
+    }, 800);
+});
+
+
+
+</script>
+
+               
+<footer style="text-align:center; margin: 2rem 0; font-size: 0.9rem; color: #555;">
+  <p>Affiliate-Hinweis: Diese Webseite enthält Affiliate-Links. Beim Kauf über diese Links erhalten wir eine Provision, ohne dass für Sie zusätzliche Kosten entstehen.</p>
+</body>
+</html>
