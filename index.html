@@ -1,595 +1,520 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JMVEST Brokervergleich</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JMvest Brokervergleich</title>
+<meta name="description" content="Geführter Brokervergleich: viele Ergebnisse (Top 10), klare Feature-Auflistung je Broker, verständlicher Hinweis, Konfetti nach oben.">
 <style>
-body {
-    font-family: 'Inter', sans-serif;
-    background: #f9fafb;
-    margin: 0;
-    padding: 0;
+:root{
+  --bg:#fafafa;
+  --surface:#ffffff;
+  --ink:#0f172a;
+  --muted:#475569;
+  --line:#e5e7eb;
+  --brand:#2563eb;
+  --accent:#22c55e;
+  --radius:16px;
+  --shadow:0 10px 25px rgba(2,6,23,.06);
 }
-header {
-    background: linear-gradient(90deg, #f5f7f8, #f5f7f8);
-    color: #134e2d;
-    padding: 1rem 2rem;
-    text-align: center;
-    border-bottom: 4px solid #f5f7f8;
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;overflow-x:hidden}
+a{color:inherit}
+.world{position:fixed;inset:0;z-index:-2;background-image:url('cartoon-island.png');background-size:cover;background-position:center;opacity:.12}
+.grid-overlay{position:fixed;inset:0;z-index:-1;opacity:.04;background:repeating-linear-gradient(90deg, rgba(2,6,23,.02), rgba(2,6,23,.02) 1px, transparent 1px, transparent 22px),repeating-linear-gradient(0deg, rgba(2,6,23,.02), rgba(2,6,23,.02) 1px, transparent 1px, transparent 22px)}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.container{max-width:1000px;margin:0 auto;padding:14px}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logoText{display:flex;gap:10px;align-items:center}
+.brand-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(45deg,var(--brand),var(--accent));box-shadow:0 0 14px rgba(37,99,235,.35)}
+.hero h1{margin:0;font-size:clamp(20px,3vw,28px);font-weight:900;letter-spacing:-.01em}
+.hero p{margin:0;color:var(--muted);font-size:13px}
+.badge{background:#f8fafc;border:1px solid #dbeafe;padding:5px 10px;border-radius:999px;font-size:12px;color:#1e3a8a}
+.main{display:grid;grid-template-columns:1fr;gap:14px;margin-top:12px;padding:0 12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.topwrap{padding:10px 12px 0}
+.stepper{display:flex;gap:6px;flex-wrap:wrap}
+.step{display:flex;gap:8px;align-items:center;background:#fff;border:1px dashed var(--line);padding:6px 10px;border-radius:999px;color:var(--ink);opacity:.95;font-size:12px}
+.step.active{border-style:solid;opacity:1;box-shadow:0 4px 12px rgba(37,99,235,.12)}
+.step .num{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-weight:900;background:var(--brand);color:#fff;font-size:12px}
+.progress{height:6px;border-radius:999px;background:#eef2ff;overflow:hidden;border:1px solid #dbeafe;margin:8px 0}
+.progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--accent));transition:width .5s cubic-bezier(.2,.8,.2,1)}
+/* Compact criteria ribbon */
+.crit{padding:8px 12px;border-top:1px solid var(--line);background:#fff;display:flex;gap:8px;flex-wrap:wrap}
+.kpill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);padding:4px 8px;border-radius:999px;font-size:11px;background:#fff;opacity:.85}
+.kpill.active{opacity:1;box-shadow:0 2px 8px rgba(2,6,23,.06)}
+.kpill .ico{font-size:14px}
+/* Questions */
+.qwrap{padding:18px 16px 6px}
+.qtitle{margin:0 0 4px;font-size:22px;font-weight:900;letter-spacing:-.01em}
+.qsub{margin:0 0 14px;color:var(--muted);font-size:14px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:780px){.options{grid-template-columns:1fr}}
+.opt{
+  background:#fff;border:2px solid var(--line);
+  border-radius:14px;padding:18px 16px;cursor:pointer;display:flex;gap:12px;align-items:flex-start;
+  transition:transform .12s ease, border-color .12s ease, box-shadow .12s ease;min-height:68px;font-size:16px;line-height:1.25;
+  outline:none;
 }
-header h1 {
-    margin: 0;
-    font-size: 1.8rem;
-}
-.container {
-    max-width: 600px;
-    margin: 2rem auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-}
-label {
-    display: block;
-    margin-top: 1rem;
-    font-weight: 600;
-}
-select, button {
-    width: 100%;
-    padding: 0.7rem;
-    margin-top: 0.3rem;
-    border-radius: 0.5rem;
-    border: 1px solid #ddd;
-    font-size: 1rem;
-}
-button {
-    background: #22c55e;
-    color: white;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    margin-top: 1.5rem;
-    transition: background 0.3s;
-}
-button:hover {
-    background: #16a34a;
-}
-.loader {
-    border: 5px solid #d0f8d6;
-    border-top: 5px solid #22c55e;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: 2rem auto;
-    display: none;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.broker-card {
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 1rem;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    
-}
-.match-bar-container {
-    background: #eee;
-    border-radius: 0.5rem;
-    width: 100%;
-    height: 12px;
-    margin-top: 0.5rem;
-    overflow: hidden;
-}
-.match-bar-fill {
-    height: 100%;
-    border-radius: 0.5rem;
-    transition: width 0.5s;
-}
-
-.broker-card img {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    margin-right: 1rem;
-}
-.broker-card h3 {
-    margin: 0 0 0.3rem 0;
-    font-size: 1.1rem;
-}
-.affiliate-link {
-    background: #22c55e;
-    color: white;
-    text-decoration: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 0.5rem;
-    display: inline-block;
-    margin-top: 0.5rem;
-    font-size: 0.9rem;
-}
-.affiliate-link:hover {
-    background: #16a34a;
-}
+.opt:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(2,6,23,.06);border-color:#c3dafe}
+.opt.active{border-color:var(--brand);box-shadow:0 10px 26px rgba(37,99,235,.16);background:#f8fbff}
+.opt:focus-visible{border-color:var(--brand);box-shadow:0 0 0 3px rgba(37,99,235,.25)}
+.opt .ico{font-size:22px;margin-top:1px}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-top:1px solid var(--line);background:#fff;border-radius:0 0 var(--radius) var(--radius)}
+.btn{height:42px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:#fff;font-weight:800;cursor:pointer;color:var(--ink)}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.xpwrap{min-width:160px}
+.xpbar{height:8px;border-radius:999px;background:#eef2ff;overflow:hidden;border:1px solid #dbeafe}
+.xpbar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#22c55e);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.small{font-size:12px;color:#334155}
+/* Results */
+.results{padding:12px}
+.rlead{margin:0 0 6px;font-weight:900;letter-spacing:-.01em}
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:900px){.rgrid{grid-template-columns:1fr}}
+.rcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;box-shadow:var(--shadow)}
+.logo{width:60px;height:60px;border-radius:12px;border:1px solid var(--line);object-fit:cover;background:#fff}
+.rname{margin:0;font-weight:900}
+.rdesc{margin:2px 0 0;color:#475569;font-size:14px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:#f8fafc}
+.tag.ok{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
+.score{font-size:22px;font-weight:900;color:#16a34a}
+.cta{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--accent);color:#fff;font-weight:900;padding:10px 14px;border-radius:12px;border:0}
+.relax{background:#eef2ff;border:1px solid #dbeafe;color:#1e3a8a;padding:10px 12px;border-radius:12px;margin:8px 0 12px}
+.relax ul{margin:6px 0 0 18px}
+.morewrap{display:flex;justify-content:center;margin-top:10px}
+.morebtn{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+/* Feature list inside card */
+.features{list-style:none;margin:8px 0 0;padding:0}
+.features li{display:flex;align-items:center;gap:8px;font-size:13px;margin:2px 0;color:#0f172a}
+.features .ico{font-size:16px;opacity:.85}
+.why{list-style:none;margin:6px 0 0 0;padding:0}
+.why li{font-size:12px;color:#334155;margin:2px 0}
+/* Disclaimer below the card */
+.disclaimer{max-width:1000px;margin:0 auto 24px auto;padding:0 12px}
+.disclaimer .text{font-size:12px;color:#475569;margin:6px 0 0}
+/* Upward confetti overlay */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:9999}
 </style>
 </head>
 <body>
+<div class="world"></div>
+<div class="grid-overlay"></div>
 
 <header>
-    <br>
-    <h1>🚀 JMVEST Brokervergleich</h1>
-   
+
+      <div>
+      <center><h1>JMVEST BROKERVERGLEICH</h1></center>
+    </div>
+    
+
 </header>
-<p style="text-align:center;">Finde in Sekunden einen Broker, der perfekt zu dir passt.</p>
-<div class="container">
-    <form id="broker-form">
 
-        <label>👤 Erfahrung:</label>
-        <select name="experience">
-            <option value="beginner">Anfänger</option>
-            <option value="intermediate">Fortgeschritten</option>
-            <option value="expert">Experte</option>
-        </select>
+<main class="main">
+  <section class="card fade-in">
+    <div class="topwrap">
+      <div class="stepper" id="stepper"></div>
+      <div class="progress" aria-hidden="true"><span id="progressbar"></span></div>
+    </div>
 
-        <label>📈 Produkte:</label>
-        <select name="products">
-            <option value="stocks">Aktien</option>
-            <option value="etf">ETFs</option>
-            <option value="crypto">Krypto</option>
-            <option value="options">Optionen</option>
-            <option value="all">Alles</option>
-        </select>
+    <div class="crit" id="crit">
+      <span class="kpill" data-token="goal"><span class="ico">🎯</span>Ziel</span>
+      <span class="kpill" data-token="exp"><span class="ico">🎓</span>Erfahrung</span>
+      <span class="kpill" data-token="tax"><span class="ico">🧾</span>Steuer</span>
+      <span class="kpill" data-token="app"><span class="ico">📱</span>App</span>
+      <span class="kpill" data-token="market"><span class="ico">🌍</span>Markt</span>
+      <span class="kpill" data-token="activity"><span class="ico">📈</span>Aktivität</span>
+      <span class="kpill" data-token="deriv"><span class="ico">🎯</span>Derivate</span>
+      <span class="kpill" data-token="cryptoNeed"><span class="ico">₿</span>Krypto</span>
+      <span class="kpill" data-token="intl"><span class="ico">🧭</span>International</span>
+      <span class="kpill" data-token="support"><span class="ico">🛎️</span>Support</span>
+      <span class="kpill" data-token="reg"><span class="ico">🏛️</span>Regulator</span>
+    </div>
 
-        <label>💰 Automatischer Steuerabzug?</label>
-        <select name="tax">
-            <option value="yes">Ja</option>
-            <option value="no">Nein</option>
-        </select>
+    <div class="qwrap" id="qwrap"></div>
 
-        <label>🛡️ Regulierung:</label>
-        <select name="regulation">
-            <option value="strict">Streng</option>
-            <option value="moderate">Mittel</option>
-            <option value="low">Locker</option>
-        </select>
+    <div class="nav">
+      <button id="backBtn" class="btn">Zurück</button>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="xpwrap">
+          <div class="xpbar"><span id="xpbar"></span></div>
+          <div class="small" id="xptext">Fortschritt: 0%</div>
+        </div>
+        <button id="nextBtn" class="btn primary">Weiter</button>
+      </div>
+    </div>
+  </section>
 
-        <label>📱 Mobile App benötigt?</label>
-        <select name="mobileApp">
-            <option value="yes">Ja</option>
-            <option value="no">Nein</option>
-        </select>
+  <section class="card fade-in" id="resultsCard" hidden>
+    <div class="results">
+      <h3 class="rlead">Top 10 (nach Punkten)</h3>
+      <div id="relaxNote" class="relax" hidden></div>
+      <div class="rgrid" id="rgridTop10"></div>
+      <div class="morewrap"><button id="moreBtn" class="morebtn" hidden>Weitere Ergebnisse anzeigen</button></div>
+      <div class="rgrid" id="rgridMore" style="margin-top:10px" hidden></div>
+    </div>
+  </section>
+</main>
 
-        <label>☎️ Support-Erreichbarkeit:</label>
-        <select name="support">
-            <option value="24/7">24/7</option>
-            <option value="business-hours">Geschäftszeiten</option>
-        </select>
-
-        <label>💳 Zahlungsmethoden:</label>
-        <select name="paymentMethods">
-            <option value="sepa">SEPA</option>
-            <option value="creditcard">Kreditkarte</option>
-            <option value="paypal">PayPal</option>
-            <option value="all">Alle</option>
-        </select>
-
-        <label>🌍 Handelsplätze:</label>
-        <select name="marketplaces">
-            <option value="global">Global</option>
-            <option value="eu">EU</option>
-            <option value="de">Deutschland</option>
-        </select>
-
-        <label>👌 Benutzerfreundlichkeit:</label>
-        <select name="usability">
-            <option value="easy">Einfach</option>
-            <option value="medium">Mittel</option>
-            <option value="advanced">Erweitert</option>
-        </select>
-
-        <label>📊 Anzahl Produkte:</label>
-        <select name="productCount">
-            <option value="few">Wenige</option>
-            <option value="many">Viele</option>
-        </select>
-
-        <label>⭐ Kundenzufriedenheit:</label>
-        <select name="customerSatisfaction">
-            <option value="high">Hoch</option>
-            <option value="medium">Mittel</option>
-        </select>
-
-        <button type="submit">🚀 Broker finden</button>
-    </form>
-
-    <div id="loader" class="loader"></div>
-    <div id="results"></div>
+<!-- Disclaimer now outside/below the results card -->
+<div class="disclaimer">
+  <p class="text">Angaben ohne Gewähr. Prüfe Gebühren, Produkte und rechtliche Hinweise direkt beim Anbieter. Affiliate‑Links möglich.</p>
 </div>
 
+<canvas class="confetti" id="confetti"></canvas>
+
+<footer class="container" style="opacity:.9">
+  <p class="small">„BaFin“ = Bundesanstalt für Finanzdienstleistungsaufsicht (Deutschland). Weitere Aufsichten: FCA (UK), CySEC (CY), SEC/FINRA (US), EU/EWR. „Steuer: automatisch“ = i. d. R. automatische Berücksichtigung der Abgeltungsteuer (keine Steuerberatung). CFDs sind komplexe Instrumente mit hohem Risiko.</p>
+</footer>
+
 <script>
+// ---- Daten ----
 const brokers = [
-    {
-        name: "Trade Republic",
-        description: "Einfacher mobiler Handel mit Aktien und ETFs.",
-        logo: "https://zeitundwert.de/wp-content/uploads/traderepublic-logo.jpg",
-        affiliateLink: "https://affiliate.traderepublic.com",
-        products: ["stocks", "etf", "crypto", "all"],
-        mobileApp: "yes",
-        tax: "yes",
-        regulation: "strict",
-        experience: "beginner",
-        support: "business-hours",
-        paymentMethods: "sepa",
-        marketplaces: "de",
-        usability: "easy",
-        productCount: "many",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "Scalable Capital",
-        description: "ETF-Sparpläne und Aktien günstig handeln.",
-        logo: "https://play-lh.googleusercontent.com/4O_Bmd1yiyTSWQPgBtV0xDY7n7Jht7ds3m1ZtT4_6MEYi7dgpjZ8JeqmMvl6rgu1Blc=w240-h480-rw",
-        affiliateLink: "https://affiliate.scalable.capital",
-        products: ["stocks", "etf", "all"],
-        mobileApp: "yes",
-        tax: "yes",
-        regulation: "strict",
-        experience: "intermediate",
-        support: "business-hours",
-        paymentMethods: "sepa",
-        marketplaces: "de",
-        usability: "easy",
-        productCount: "many",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "eToro",
-        description: "Social Trading mit Aktien, ETFs und Krypto.",
-        logo: "https://play-lh.googleusercontent.com/GAF_66TZ8YC8OTBEKF5cueh1UI9_EGKud4yY9olL6_tVYasb88Knx2z7YopD8pW3SPc",
-        affiliateLink: "https://affiliate.etoro.com",
-        products: ["stocks", "etf", "crypto", "options", "all"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "moderate",
-        experience: "beginner",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "global",
-        usability: "easy",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Plus500",
-        description: "CFD Broker mit weltweitem Zugang zu Märkten.",
-        logo: "https://s3-eu-west-1.amazonaws.com/tpd/logos/4bdca36a000064000505e284/0x0.png",
-        affiliateLink: "https://affiliate.plus500.com",
-        products: ["stocks", "etf", "crypto", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "moderate",
-        experience: "intermediate",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "global",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Finanzen.net Zero",
-        description: "ETFs, Aktien, Kryptos übersichtliche App Deutscher Broker BaFin-Regulierung Automatische Steuerabführung",
-          logo: "https://play-lh.googleusercontent.com/zFXb9Z24KQYchyKeU6pboBYVs3n9lruofrUO-eWaRzxwJreBLOF83cJDJXLvIOeuBX6O",
-        affiliateLink: "https://affiliate.finanzenzero.de",
-        products: ["stocks", "etf"],
-        mobileApp: "yes",
-        tax: "yes",
-        regulation: "strict",
-        experience: "beginner",
-        support: "business-hours",
-        paymentMethods: "sepa",
-        marketplaces: "de",
-        usability: "easy",
-        productCount: "few",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "Interactive Brokers",
-        description: "Globale Plattform für aktive Trader.",
-        logo: "https://s3-eu-west-1.amazonaws.com/tpd/logos/597c8ceb0000ff0005a7af84/0x0.png",
-        affiliateLink: "https://www.interactivebrokers.com",
-        products: ["stocks", "etf", "options", "all"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "expert",
-        support: "24/7",
-        paymentMethods: "sepa",
-        marketplaces: "global",
-        usability: "advanced",
-        productCount: "many",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "DEGIRO",
-        description: "Günstiger Aktienhandel mit großem Angebot.",
-        logo: "https://play-lh.googleusercontent.com/j5CuJUMDomv3ZpzbM5HLxNKdlaDmCjEYfOtbzHI8redmXC7AHrisd_4S2RcGwW3yhw",
-        affiliateLink: "https://affiliate.degiro.com",
-        products: ["stocks", "etf", "options", "all"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "intermediate",
-        support: "business-hours",
-        paymentMethods: "sepa",
-        marketplaces: "eu",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Robinhood",
-        description: "Beliebter US-Broker mit einfacher App.",
-        logo: "https://play-lh.googleusercontent.com/gdh_yiRr-u_xS1o76iOBpDp5-6l_qnvAAmD_Ft3KUFPSYdYZNEQT-rmPcFV2YaPSEhE",
-        affiliateLink: "https://www.robinhood.com",
-        products: ["stocks", "etf", "crypto", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "moderate",
-        experience: "beginner",
-        support: "business-hours",
-        paymentMethods: "creditcard",
-        marketplaces: "usa",
-        usability: "easy",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Charles Schwab",
-        description: "Großer US-Broker mit starkem Support.",
-        logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Charles_Schwab_Corporation_logo.svg/1200px-Charles_Schwab_Corporation_logo.svg.png",
-        affiliateLink: "https://www.schwab.com",
-        products: ["stocks", "etf", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "intermediate",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "usa",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "Fidelity",
-        description: "USA-Broker mit großem Angebot und Support.",
-        logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPqH2CMC1VO0PEIX8JRyh-u9USpMD99JpL1Q&s",
-        affiliateLink: "https://www.fidelity.com",
-        products: ["stocks", "etf", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "intermediate",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "usa",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "TD Ameritrade",
-        description: "US-Broker mit professionellen Tools.",
-        logo: "https://static.cdnlogo.com/logos/t/33/td-ameritrade-thumb.png",
-        affiliateLink: "https://www.tdameritrade.com",
-        products: ["stocks", "etf", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "expert",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "usa",
-        usability: "advanced",
-        productCount: "many",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "IG",
-        description: "UK-basierter Broker mit großem CFD-Angebot.",
-        logo: "https://a.c-dn.net/c/etc.clientlibs/settings/wcm/designs/onedomain/1752644861000/clientlibs_resources/resources/images/og_image.jpg",
-        affiliateLink: "https://www.ig.com",
-        products: ["stocks", "etf", "crypto", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "intermediate",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "global",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Saxo Bank",
-        description: "Dänischer Broker mit globaler Reichweite.",
-        logo: "https://play-lh.googleusercontent.com/LHYaBIktBqHVEPPuY2_7009mvy57gMWQEJk2Izzk2BRaTYwc9n7eLN_idJk_LYCeT0g",
-        affiliateLink: "https://www.home.saxo",
-        products: ["stocks", "etf", "crypto", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "expert",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "global",
-        usability: "advanced",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "XTB",
-        description: "CFD und Forex Broker aus Europa.",
-        logo: "https://play-lh.googleusercontent.com/YGhVx8pdB0SCT1PFhGysBxSZmD4WM6Ca4uPORcG2myfx86jatXeySbPjDlrqbEshtTPL=s256-rw",
-        affiliateLink: "https://www.xtb.com",
-        products: ["stocks", "etf", "crypto", "options"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "strict",
-        experience: "intermediate",
-        support: "24/7",
-        paymentMethods: "creditcard",
-        marketplaces: "global",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Freedom24",
-        description: "Aktienhandel mit Zugang zu IPOs.",
-        logo: "https://play-lh.googleusercontent.com/q7smmyApH2peS_zw6UO-W8ztRelny58S3SA-Q4_kSYIfqqKOhF1_uj0yG1PA6PNtJfs",
-        affiliateLink: "https://www.freedom24.com",
-        products: ["stocks", "etf"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "moderate",
-        experience: "intermediate",
-        support: "business-hours",
-        paymentMethods: "creditcard",
-        marketplaces: "global",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Smartbroker",
-        description: "Günstiger deutscher Broker für Aktien & ETFs.",
-        logo: "https://play-lh.googleusercontent.com/UmbxW4fmxxW6xOm5XKDC0LWBz5KfH558a0IM8b326nCy-R5n_DbXQy_DfmfPbq_RWXZx=w240-h480-rw",
-        affiliateLink: "https://www.smartbroker.de",
-        products: ["stocks", "etf", "all"],
-        mobileApp: "no",
-        tax: "yes",
-        regulation: "strict",
-        experience: "intermediate",
-        support: "business-hours",
-        paymentMethods: "sepa",
-        marketplaces: "de",
-        usability: "medium",
-        productCount: "many",
-        customerSatisfaction: "high"
-    },
-    {
-        name: "Trading 212",
-        description: "UK-Broker mit provisionsfreiem Handel.",
-        logo: "https://play-lh.googleusercontent.com/HZZC2xPWtLqR3JmmjnMvcIO6gXjChEt3ugU2GpSyLqnVI9KP6cyCsWV9MnYCR_ZmPBfy",
-        affiliateLink: "https://www.trading212.com",
-        products: ["stocks", "etf", "crypto"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "moderate",
-        experience: "beginner",
-        support: "business-hours",
-        paymentMethods: "creditcard",
-        marketplaces: "uk",
-        usability: "easy",
-        productCount: "many",
-        customerSatisfaction: "medium"
-    },
-    {
-        name: "Revolut",
-        description: "Banking App mit Aktien- und Kryptohandel.",
-        logo: "https://play-lh.googleusercontent.com/bo7Qeq8XZVI4hyXTVyG7Oi3hMiqADqruYeyQWqzzJzNHCYNVLmpAne0XP4_JH2AJ1tE=w240-h480-rw",
-        affiliateLink: "https://www.revolut.com",
-        products: ["stocks", "crypto"],
-        mobileApp: "yes",
-        tax: "no",
-        regulation: "moderate",
-        experience: "beginner",
-        support: "business-hours",
-        paymentMethods: "creditcard",
-        marketplaces: "uk",
-        usability: "easy",
-        productCount: "few",
-        customerSatisfaction: "medium"
-    }
+  {name:"Trade Republic",description:"Einfacher mobiler Handel mit Aktien & ETFs.",logo:"https://zeitundwert.de/wp-content/uploads/traderepublic-logo.jpg",affiliateLink:"https://affiliate.traderepublic.com",products:["stocks","etf","crypto","all"],mobileApp:"yes",tax:"yes",regulator:"BaFin",experience:"beginner",support:"business-hours",paymentMethods:"sepa",marketplaces:"de",usability:"easy",productCount:"many",customerSatisfaction:"high"},
+  {name:"Scalable Capital",description:"ETF-Sparpläne & Aktien günstig handeln.",logo:"https://play-lh.googleusercontent.com/4O_Bmd1yiyTSWQPgBtV0xDY7n7Jht7ds3m1ZtT4_6MEYi7dgpjZ8JeqmMvl6rgu1Blc=w240-h480-rw",affiliateLink:"https://affiliate.scalable.capital",products:["stocks","etf","all"],mobileApp:"yes",tax:"yes",regulator:"BaFin",experience:"intermediate",support:"business-hours",paymentMethods:"sepa",marketplaces:"de",usability:"easy",productCount:"many",customerSatisfaction:"high"},
+  {name:"Finanzen.net Zero",description:"Deutscher Broker, BaFin-reguliert, automatische Steuer.",logo:"https://play-lh.googleusercontent.com/zFXb9Z24KQYchyKeU6pboBYVs3n9lruofrUO-eWaRzxwJreBLOF83cJDJXLvIOeuBX6O",affiliateLink:"https://affiliate.finanzenzero.de",products:["stocks","etf"],mobileApp:"yes",tax:"yes",regulator:"BaFin",experience:"beginner",support:"business-hours",paymentMethods:"sepa",marketplaces:"de",usability:"easy",productCount:"few",customerSatisfaction:"high"},
+  {name:"Smartbroker",description:"Günstiger deutscher Broker für Aktien & ETFs.",logo:"https://play-lh.googleusercontent.com/UmbxW4fmxxW6xOm5XKDC0LWBz5KfH558a0IM8b326nCy-R5n_DbXQy_DfmfPbq_RWXZx?w=240",affiliateLink:"https://www.smartbroker.de",products:["stocks","etf","all"],mobileApp:"no",tax:"yes",regulator:"BaFin",experience:"intermediate",support:"business-hours",paymentMethods:"sepa",marketplaces:"de",usability:"medium",customerSatisfaction:"high",productCount:"many"},
+  {name:"DEGIRO",description:"Günstiger Handel, großes Angebot (NL).",logo:"https://play-lh.googleusercontent.com/j5CuJUMDomv3ZpzbM5HLxNKdlaDmCjEYfOtbzHI8redmXC7AHrisd_4S2RcGwW3yhw",affiliateLink:"https://affiliate.degiro.com",products:["stocks","etf","options","all"],mobileApp:"yes",tax:"no",regulator:"EU",experience:"intermediate",support:"business-hours",paymentMethods:"sepa",marketplaces:"eu",usability:"medium",customerSatisfaction:"medium",productCount:"many"},
+  {name:"Interactive Brokers",description:"Globale Plattform für aktive Trader (US).",logo:"https://s3-eu-west-1.amazonaws.com/tpd/logos/597c8ceb0000ff0005a7af84/0x0.png",affiliateLink:"https://www.interactivebrokers.com",products:["stocks","etf","options","all"],mobileApp:"yes",tax:"no",regulator:"SEC/FINRA",experience:"expert",support:"24/7",paymentMethods:"sepa",marketplaces:"global",usability:"advanced",customerSatisfaction:"high",productCount:"many"},
+  {name:"eToro",description:"Social Trading mit Aktien, ETFs & Krypto.",logo:"https://play-lh.googleusercontent.com/GAF_66TZ8YC8OTBEKF5cueh1UI9_EGKud4yY9olL6_tVYasb88Knx2z7YopD8pW3SPc",affiliateLink:"https://affiliate.etoro.com",products:["stocks","etf","crypto","options","all"],mobileApp:"yes",tax:"no",regulator:"CySEC",experience:"beginner",support:"24/7",paymentMethods:"creditcard",marketplaces:"global",usability:"easy",customerSatisfaction:"medium",productCount:"many"},
+  {name:"Plus500",description:"CFD-Broker mit globalem Zugang.",logo:"https://s3-eu-west-1.amazonaws.com/tpd/logos/4bdca36a000064000505e284/0x0.png",affiliateLink:"https://affiliate.plus500.com",products:["stocks","etf","crypto","options"],mobileApp:"yes",tax:"no",regulator:"FCA",experience:"intermediate",support:"24/7",paymentMethods:"creditcard",marketplaces:"global",usability:"medium",customerSatisfaction:"medium"},
+  {name:"IG",description:"UK-Broker mit großem CFD-Angebot.",logo:"https://a.c-dn.net/c/etc.clientlibs/settings/wcm/designs/onedomain/1752644861000/clientlibs_resources/resources/images/og_image.jpg",affiliateLink:"https://www.ig.com",products:["stocks","etf","crypto","options"],mobileApp:"yes",tax:"no",regulator:"FCA",experience:"intermediate",support:"24/7",paymentMethods:"creditcard",marketplaces:"global",usability:"medium",customerSatisfaction:"medium"},
+  {name:"Saxo Bank",description:"Dänischer Broker mit globaler Reichweite.",logo:"https://play-lh.googleusercontent.com/LHYaBIktBqHVEPPuY2_7009mvy57gMWQEJk2Izzk2BRaTYwc9n7eLN_idJk_LYCeT0g",affiliateLink:"https://www.home.saxo",products:["stocks","etf","crypto","options"],mobileApp:"yes",tax:"no",regulator:"EU",experience:"expert",support:"24/7",paymentMethods:"creditcard",marketplaces:"global",usability:"advanced",customerSatisfaction:"medium"},
+  {name:"XTB",description:"CFD & Forex Broker aus Europa.",logo:"https://play-lh.googleusercontent.com/YGhVx8pdB0SCT1PFhGysBxSZmD4WM6Ca4uPORcG2myfx86jatXeySbPjDlrqbEshtTPL=s256-rw",affiliateLink:"https://www.xtb.com",products:["stocks","etf","crypto","options"],mobileApp:"yes",tax:"no",regulator:"EU",experience:"intermediate",support:"24/7",paymentMethods:"creditcard",marketplaces:"global",usability:"medium",customerSatisfaction:"medium"},
+  {name:"Freedom24",description:"Aktienhandel mit Zugang zu IPOs.",logo:"https://play-lh.googleusercontent.com/q7smmyApH2peS_zw6UO-W8ztRelny58S3SA-Q4_kSYIfqqKOhF1_uj0yG1PA6PNtJfs",affiliateLink:"https://www.freedom24.com",products:["stocks","etf"],mobileApp:"yes",tax:"no",regulator:"CySEC",experience:"intermediate",support:"business-hours",paymentMethods:"creditcard",marketplaces:"global",usability:"medium",customerSatisfaction:"medium"},
+  {name:"Trading 212",description:"UK-Broker mit provisionsfreiem Handel.",logo:"https://play-lh.googleusercontent.com/HZZC2xPWtLqR3JmmjnMvcIO6gXjChEt3ugU2GpSyLqnVI9KP6cyCsWV9MnYCR_ZmPBfy",affiliateLink:"https://www.trading212.com",products:["stocks","etf","crypto"],mobileApp:"yes",tax:"no",regulator:"FCA",experience:"beginner",support:"business-hours",paymentMethods:"creditcard",marketplaces:"uk",usability:"easy",customerSatisfaction:"medium",productCount:"many"},
+  {name:"Revolut",description:"Banking-App mit Aktien- & Kryptohandel.",logo:"https://play-lh.googleusercontent.com/bo7Qeq8XZVI4hyXTVyG7Oi3hMiqADqruYeyQWqzzJzNHCYNVLmpAne0XP4_JH2AJ1tE=w240-h480-rw",affiliateLink:"https://www.revolut.com",products:["stocks","crypto"],mobileApp:"yes",tax:"no",regulator:"FCA",experience:"beginner",support:"business-hours",paymentMethods:"creditcard",marketplaces:"uk",usability:"easy",customerSatisfaction:"medium",productCount:"few"},
+  {name:"Charles Schwab",description:"Großer US-Broker mit starkem Support.",logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Charles_Schwab_Corporation_logo.svg/1200px-Charles_Schwab_Corporation_logo.svg.png",affiliateLink:"https://www.schwab.com",products:["stocks","etf","options"],mobileApp:"yes",tax:"no",regulator:"SEC/FINRA",experience:"intermediate",support:"24/7",paymentMethods:"creditcard",marketplaces:"usa",usability:"medium",customerSatisfaction:"high",productCount:"many"},
+  {name:"Fidelity",description:"US-Broker mit großem Angebot & Support.",logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPqH2CMC1VO0PEIX8JRyh-u9USpMD99JpL1Q&s",affiliateLink:"https://www.fidelity.com",products:["stocks","etf","options"],mobileApp:"yes",tax:"no",regulator:"SEC/FINRA",experience:"intermediate",support:"24/7",paymentMethods:"creditcard",marketplaces:"usa",usability:"medium",customerSatisfaction:"high",productCount:"many"},
+  {name:"TD Ameritrade",description:"US-Broker mit professionellen Tools.",logo:"https://static.cdnlogo.com/logos/t/33/td-ameritrade-thumb.png",affiliateLink:"https://www.tdameritrade.com",products:["stocks","etf","options"],mobileApp:"yes",tax:"no",regulator:"SEC/FINRA",experience:"expert",support:"24/7",paymentMethods:"creditcard",marketplaces:"usa",usability:"advanced",customerSatisfaction:"high",productCount:"many"}
 ];
 
-document.getElementById("broker-form").addEventListener("submit", function(e){
-    e.preventDefault();
-    const loader = document.getElementById("loader");
-    loader.style.display = "block";
-    const results = document.getElementById("results");
-    results.innerHTML = "";
+// ---- Fragen ----
+const steps=[
+  { key:'goal', title:'Was ist dein Ziel?', sub:'Wähle dein Hauptziel.', options:[
+    {v:'sparplan', label:'Sparpläne (ETF/regelmäßig)', ico:'📅'},
+    {v:'long', label:'Langfristig anlegen (Aktien/ETFs)', ico:'🧭'},
+    {v:'trade', label:'Aktiv traden (z. B. Optionen/CFDs)', ico:'⚡'},
+    {v:'crypto', label:'Krypto im Fokus', ico:'₿'} ]},
+  { key:'exp', title:'Wie schätzt du deine Erfahrung ein?', sub:'Bitte eine Option wählen.', options:[
+    {v:'beginner', label:'Einsteiger', ico:'🌱'},
+    {v:'intermediate', label:'Fortgeschritten', ico:'🌿'},
+    {v:'expert', label:'Experte', ico:'🌳'} ]},
+  { key:'tax', title:'Steuer in Deutschland', sub:'Wie wichtig ist automatische Abgeltungsteuer?', options:[
+    {v:'must', label:'Muss automatisch sein', ico:'✅'},
+    {v:'prefer', label:'Wäre gut, aber kein Muss', ico:'👍'},
+    {v:'no', label:'Egal / mache ich selbst', ico:'📝'} ]},
+  { key:'app', title:'Mobile App', sub:'Wie wichtig ist dir eine App?', options:[
+    {v:'must', label:'Muss vorhanden sein', ico:'📱'},
+    {v:'prefer', label:'Wäre gut', ico:'🙂'},
+    {v:'no', label:'Nicht wichtig', ico:'💻'} ]},
+  { key:'market', title:'Bevorzugter Markt', sub:'Wo möchtest du hauptsächlich handeln?', options:[
+    {v:'de', label:'Deutschland', ico:'🇩🇪'},
+    {v:'eu', label:'Europa', ico:'🇪🇺'},
+    {v:'usa', label:'USA', ico:'🗽'},
+    {v:'uk', label:'UK', ico:'🇬🇧'},
+    {v:'global', label:'Global', ico:'🌍'} ]},
+  { key:'activity', title:'Wie aktiv wirst du handeln?', sub:'Wähle die voraussichtliche Frequenz.', options:[
+    {v:'none', label:'Selten / Buy&Hold', ico:'🛌'},
+    {v:'low', label:'0–5 Trades/Monat', ico:'🧊'},
+    {v:'mid', label:'5–20/Monat', ico:'🔥'},
+    {v:'high', label:'20+/Monat', ico:'🚀'} ]},
+  { key:'deriv', title:'Derivate (Optionen/CFDs)?', sub:'Wie wichtig sind dir Derivate?', options:[
+    {v:'must', label:'Müssen angeboten werden', ico:'🎯'},
+    {v:'prefer', label:'Wäre gut', ico:'🙂'},
+    {v:'no', label:'Egal', ico:'🚫'} ]},
+  { key:'cryptoNeed', title:'Krypto‑Handel?', sub:'Wie wichtig ist Krypto?', options:[
+    {v:'must', label:'Muss angeboten werden', ico:'₿'},
+    {v:'prefer', label:'Wäre gut', ico:'🙂'},
+    {v:'no', label:'Egal', ico:'💤'} ]},
+  { key:'intl', title:'Internationale Börsenplätze', sub:'Wie wichtig ist globaler Zugang?', options:[
+    {v:'must', label:'Muss global sein', ico:'🧭'},
+    {v:'prefer', label:'Wäre gut', ico:'🙂'},
+    {v:'no', label:'Nicht nötig', ico:'📍'} ]},
+  { key:'support', title:'Support‑Verfügbarkeit', sub:'Wann soll Support erreichbar sein?', options:[
+    {v:'business-hours', label:'Geschäftszeiten reichen', ico:'🕘'},
+    {v:'24/7', label:'24/7‑Support wichtig', ico:'🌙'},
+    {v:'any', label:'Egal', ico:'🙌'} ]},
+  { key:'reg', title:'Regulatorische Präferenz', sub:'Welche Aufsicht bevorzugst du?', options:[
+    {v:'bafin', label:'Bevorzugt BaFin (DE)', ico:'🏛️'},
+    {v:'eu', label:'EU/EWR reicht', ico:'🇪🇺'},
+    {v:'any', label:'Egal', ico:'🌐'} ]},
+];
 
-    setTimeout(() => {
-        const formData = new FormData(e.target);
-        const userPreferences = {};
-        formData.forEach((value, key) => userPreferences[key] = value);
+const answers={}; let stepIndex=0;
 
-        const totalFields = Object.keys(userPreferences).length;
-        const maxScore = totalFields * 10;
+// ---- UI ----
+const $=s=>document.querySelector(s);
+const stepper=$("#stepper"), progressbar=$("#progressbar"), qwrap=$("#qwrap");
+const backBtn=$("#backBtn"), nextBtn=$("#nextBtn"), xpbar=$("#xpbar"), xptext=$("#xptext");
+const crit=$("#crit"), resultsCard=$("#resultsCard"), relaxNote=$("#relaxNote");
+const rgridTop10=$("#rgridTop10"), rgridMore=$("#rgridMore"), moreBtn=$("#moreBtn");
 
-        const scoredBrokers = brokers.map(broker => {
-            let score = 0;
-            for (const key in userPreferences) {
-                if (Array.isArray(broker[key]) ? broker[key].includes(userPreferences[key]) : broker[key] === userPreferences[key]) {
-                    score += 10;
-                }
-            }
-            return { broker, score };
-        });
+function renderStepper(){
+  stepper.innerHTML = steps.map((s,i)=>`<div class="step ${i===stepIndex?'active':''}"><span class="num">${i+1}</span> ${s.title}</div>`).join('');
+  const p = Math.round((stepIndex)/steps.length*100); progressbar.style.width = `${p}%`;
+}
+function renderQuestion(){
+  const s=steps[stepIndex];
+  qwrap.innerHTML=`
+    <h3 class="qtitle">${s.title}</h3>
+    <p class="qsub">${s.sub}</p>
+    <div class="options">
+      ${s.options.map(o=>`<button class="opt ${answers[s.key]===o.v?'active':''}" data-key="${s.key}" data-value="${o.v}" role="button" tabindex="0">
+        <span class="ico">${o.ico}</span><span>${o.label}</span></button>`).join('')}
+    </div>`;
+  qwrap.querySelectorAll('.opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const key=btn.dataset.key, val=btn.dataset.value;
+      answers[key]=val;
+      qwrap.querySelectorAll('.opt').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      markToken(key); gainXP(); nextBtn.disabled=false;
+    });
+  });
+  nextBtn.disabled = !(answers[s.key]); backBtn.disabled = (stepIndex===0);
+}
+function markToken(key){ const el=crit.querySelector(`[data-token="${key}"]`); if(el) el.classList.add('active'); }
+function gainXP(){ const filled=Object.keys(answers).length; const xp=Math.round(filled/steps.length*100); xpbar.style.width=xp+'%'; xptext.textContent='Fortschritt: '+xp+'%'; }
+backBtn.addEventListener('click', ()=>{ if(stepIndex>0){ stepIndex--; renderStepper(); renderQuestion(); hideResults(); } });
+nextBtn.addEventListener('click', ()=>{ if(stepIndex<steps.length-1){ stepIndex++; renderStepper(); renderQuestion(); } else { showResults(); } });
+function hideResults(){ resultsCard.hidden=true; relaxNote.hidden=true; relaxNote.textContent=''; rgridTop10.innerHTML=''; rgridMore.innerHTML=''; moreBtn.hidden=true; }
 
-        scoredBrokers.sort((a, b) => b.score - a.score);
-        const topBrokers = scoredBrokers.slice(0, 5);
-
-        topBrokers.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "broker-card";
-            const matchPercent = Math.round((item.score / maxScore) * 100);
-           let barColor;
-if (matchPercent < 60) {
-    barColor = "#ef4444"; // rot
-} else if (matchPercent < 80) {
-    barColor = "#facc15"; // gelb
-} else {
-    barColor = "#22c55e"; // grün
+// ---- Matching ----
+function hardFilter(b,a){
+  if(a.tax==='must' && b.tax!=='yes') return false;
+  if(a.deriv==='must' && !(b.products.includes('options')||b.products.includes('all'))) return false;
+  if(a.cryptoNeed==='must' && !(b.products.includes('crypto')||b.products.includes('all'))) return false;
+  if(a.intl==='must' && !['global','usa','uk'].includes(b.marketplaces)) return false;
+  if(a.app==='must' && b.mobileApp!=='yes') return false;
+  if(a.market && b.marketplaces!==a.market) return false;
+  return true;
+}
+function relaxSequence(a){
+  const seq=[];
+  if(a.market) seq.push({k:'market', type:'drop'});
+  if(a.intl==='must') seq.push({k:'intl', from:'must', to:'prefer'});
+  if(a.app==='must') seq.push({k:'app', from:'must', to:'prefer'});
+  if(a.tax==='must') seq.push({k:'tax', from:'must', to:'prefer'});
+  if(a.intl==='prefer') seq.push({k:'intl', from:'prefer', to:'no'});
+  if(a.app==='prefer') seq.push({k:'app', from:'prefer', to:'no'});
+  if(a.tax==='prefer') seq.push({k:'tax', from:'prefer', to:'no'});
+  return seq;
 }
 
-card.innerHTML = `
-    <img src="${item.broker.logo}" alt="${item.broker.name}">
-    <div>
-        <h3>${item.broker.name}</h3>
-        <p>${item.broker.description}</p>
-        <p><strong>Übereinstimmung:</strong> ${matchPercent}%</p>
-        <div class="match-bar-container">
-            <div class="match-bar-fill" style="width: ${matchPercent}%; background: ${barColor};"></div>
-        </div>
-        <a class="affiliate-link" href="${item.broker.affiliateLink}" target="_blank">Jetzt registrieren 🚀</a>
-    </div>`;
-            results.appendChild(card);
-        });
+// ---- Scoring ----
+function scoreRawWithWhy(b,a){
+  const W={base:50, goal:22, sparplan:6, exp:10, beginnerEase:6, taxMust:12, taxPrefer:6, appMust:8, appPrefer:4, market:8, activityHi:6, activityMany:3, derivMust:10, derivPrefer:5, cryptoMust:10, cryptoPrefer:5, intlMust:8, intlPrefer:4, support:4, regBaFin:8, regEU:4, csat:6};
+  let s=W.base; const why=[]; const add=(label,pts,ok,note="")=>{ s+=pts; why.push({label,pts,ok,note}); };
 
-        loader.style.display = "none";
-    }, 800);
-});
+  function prodHas(x){ return b.products.includes(x) || b.products.includes('all'); }
 
+  // Ziel/Produktfit
+  if(a.goal==='sparplan'){
+    const etfOK = prodHas('etf'); const easyOK = b.usability==='easy';
+    add('Sparplan‑Eignung', etfOK?W.goal:-W.goal/1.4, etfOK, etfOK?'ETFs':'keine ETFs');
+    add('Einfachheit Sparplan', easyOK?W.sparplan:0, easyOK, b.usability);
+  } else if(a.goal==='long'){
+    const ok = prodHas('etf') || prodHas('stocks');
+    add('Produktfit (Anlage)', ok?W.goal:-W.goal/1.4, ok, ok?'Aktien/ETFs':'—');
+  } else if(a.goal==='trade'){
+    const ok = prodHas('options');
+    add('Produktfit (Trading)', ok?W.goal:-W.goal/1.4, ok, ok?'Derivate':'—');
+  } else if(a.goal==='crypto'){
+    const ok = prodHas('crypto');
+    add('Produktfit (Krypto)', ok?W.goal:-W.goal/1.4, ok, ok?'Krypto':'—');
+  }
 
+  // Erfahrung/Usability
+  const expOK = a.exp && b.experience===a.exp; add('Erfahrungsfit', expOK?W.exp:0, expOK, b.experience);
+  if(a.exp==='beginner'){ add('Einsteiger‑Usability', b.usability==='easy'?W.beginnerEase:0, b.usability==='easy', b.usability); }
 
+  // Steuer
+  if(a.tax==='must'){ const ok=b.tax==='yes'; add('Steuer (Muss)', ok?W.taxMust:-W.taxMust/2, ok, b.tax==='yes'?'automatisch':'manuell'); }
+  else if(a.tax==='prefer'){ const ok=b.tax==='yes'; add('Steuer (Präferenz)', ok?W.taxPrefer:0, ok, b.tax==='yes'?'automatisch':'manuell'); }
+
+  // App
+  if(a.app==='must'){ const ok=b.mobileApp==='yes'; add('App (Muss)', ok?W.appMust:-W.appMust/2, ok, b.mobileApp); }
+  else if(a.app==='prefer'){ const ok=b.mobileApp==='yes'; add('App (Präferenz)', ok?W.appPrefer:0, ok, b.mobileApp); }
+
+  // Markt
+  if(a.market){ const ok=b.marketplaces===a.market; add('Markt‑Fokus', ok?W.market:0, ok, b.marketplaces); }
+
+  // Aktivität
+  if(a.activity==='mid'){ add('Produkttiefe', b.productCount==='many'?W.activityMany:0, b.productCount==='many', b.productCount); }
+  if(a.activity==='high'){
+    add('24/7‑Support', b.support==='24/7'?W.activityHi:0, b.support==='24/7', b.support);
+    add('Produkttiefe', b.productCount==='many'?W.activityMany:0, b.productCount==='many', b.productCount);
+  }
+
+  // Derivate/Krypto/International
+  if(a.deriv==='must'){ const ok=prodHas('options'); add('Derivate (Muss)', ok?W.derivMust:-W.derivMust/2, ok); }
+  else if(a.deriv==='prefer'){ const ok=prodHas('options'); add('Derivate (Präferenz)', ok?W.derivPrefer:0, ok); }
+
+  if(a.cryptoNeed==='must'){ const ok=prodHas('crypto'); add('Krypto (Muss)', ok?W.cryptoMust:-W.cryptoMust/2, ok); }
+  else if(a.cryptoNeed==='prefer'){ const ok=prodHas('crypto'); add('Krypto (Präferenz)', ok?W.cryptoPrefer:0, ok); }
+
+  if(a.intl==='must'){ const ok=(['global','usa','uk'].includes(b.marketplaces)); add('International (Muss)', ok?W.intlMust:-W.intlMust/2, ok, b.marketplaces); }
+  else if(a.intl==='prefer'){ const ok=(['global','usa','uk'].includes(b.marketplaces)); add('International (Präferenz)', ok?W.intlPrefer:0, ok, b.marketplaces); }
+
+  // Support
+  if(a.support && a.support!=='any'){ const ok=b.support===a.support; add('Support‑Zeiten', ok?W.support:0, ok, b.support); }
+
+  // Regulator
+  if(a.reg==='bafin'){ add('Regulator: BaFin', b.regulator==='BaFin'?W.regBaFin:-W.regBaFin/2, b.regulator==='BaFin', b.regulator); }
+  else if(a.reg==='eu'){ const ok=['EU','BaFin','FCA','CySEC'].includes(b.regulator); add('Regulator: EU/EWR', ok?W.regEU:0, ok, b.regulator); }
+
+  // Qualität
+  add('Zufriedenheit', b.customerSatisfaction==='high'?W.csat:0, b.customerSatisfaction==='high', b.customerSatisfaction);
+
+  return {raw:s, why};
+}
+
+function matchAndScore(a){
+  let pool = brokers.filter(b=>hardFilter(b,a));
+  const relaxed=[];
+  if(pool.length<10){
+    const seq=relaxSequence(a); let tmp={...a};
+    for(const r of seq){
+      if(r.type==='drop' && r.k in tmp){ delete tmp[r.k]; relaxed.push('Markt‑Fixierung gelockert'); }
+      else if(tmp[r.k]===r.from){ tmp[r.k]=r.to; relaxed.push(`${r.k} von ${r.from} → ${r.to}`); }
+      pool = brokers.filter(b=>hardFilter(b,tmp));
+      if(pool.length>=10){ a=tmp; break; }
+    }
+  }
+  if(pool.length<10){
+    relaxed.push('Ergebnis erweitert, um mindestens 10 Optionen zu zeigen');
+    pool = [...brokers];
+  }
+  const scored = pool.map(b=>{
+    const {raw, why} = scoreRawWithWhy(b,a);
+    return {...b, _raw:raw, _why:why};
+  });
+  const minRaw = Math.min(...scored.map(x=>x._raw));
+  const maxRaw = Math.max(...scored.map(x=>x._raw));
+  const norm = (v)=>{
+    if(maxRaw-minRaw<1e-6) return 77;
+    return Math.round(55 + 44*(v-minRaw)/(maxRaw-minRaw));
+  };
+  const ranked = scored.map(x=>({...x, _score:norm(x._raw)})).sort((a,b)=>b._score-a._score);
+  return {list:ranked, relaxed};
+}
+
+// ---- Human labels ----
+const PROD_MAP = {stocks:'Aktien', etf:'ETFs', crypto:'Krypto', options:'Optionen/CFDs'};
+const MARKET_MAP = {de:'Deutschland', eu:'Europa', global:'Global', usa:'USA', uk:'UK'};
+function humanProducts(arr){
+  if(arr.includes('all')) return 'Aktien, ETFs, Krypto, Optionen';
+  const seen=new Set(); const out=[];
+  for(const k of arr){ if(PROD_MAP[k] && !seen.has(PROD_MAP[k])){ out.push(PROD_MAP[k]); seen.add(PROD_MAP[k]); } }
+  return out.join(', ');
+}
+function humanMarket(k){ return MARKET_MAP[k] || k; }
+function humanSupport(s){ return s==='24/7'?'24/7':'Geschäftszeiten'; }
+function humanTax(t){ return t==='yes'?'automatisch':'selbst'; }
+function humanApp(a){ return a==='yes'?'ja':'nein'; }
+function humanPay(p){ if(!p) return '—'; const m={sepa:'SEPA', creditcard:'Kreditkarte'}; return m[p]||p; }
+
+// ---- Friendly relax message ----
+function buildRelaxMessage(relaxed){
+  if(!relaxed || !relaxed.length) return '';
+  const map = {
+    'Markt‑Fixierung gelockert': 'Wir zeigen zusätzlich passende Alternativen außerhalb deines gewählten Markts.',
+    'intl von must → prefer': '„Internationale Börsenplätze“ ist keine Pflicht mehr – vorhanden = Pluspunkte.',
+    'app von must → prefer': 'Eine App ist keine Pflicht mehr – vorhandene App gibt Pluspunkte.',
+    'tax von must → prefer': '„Steuer automatisch“ ist keine Pflicht mehr – automatisch = Pluspunkte.',
+    'Ergebnis erweitert, um mindestens 10 Optionen zu zeigen': 'Zur besseren Orientierung zeigen wir mindestens 10 seriöse Optionen; deine Antworten bestimmen weiterhin die Reihenfolge.'
+  };
+  const items = relaxed.map(r => `<li>${map[r] || r}</li>`).join('');
+  return `<strong>Hinweis:</strong> Damit du genügend Auswahl siehst, haben wir sehr strenge Antworten leicht gelockert:
+    <ul>${items}</ul>
+    Anbieter, die deine ursprünglichen Wünsche vollständig erfüllen, stehen weiterhin oben.`;
+}
+
+// ---- Render results ----
+function showResults(){
+  const {list, relaxed} = matchAndScore(answers);
+  const top10 = list.slice(0,10);
+  const rest = list.slice(10);
+
+  rgridTop10.innerHTML = top10.map(card).join('');
+  if(rest.length){ moreBtn.hidden=false; rgridMore.hidden=true; moreBtn.onclick=()=>{ rgridMore.innerHTML = rest.map(card).join(''); rgridMore.hidden=false; moreBtn.hidden=true; }; }
+  resultsCard.hidden=false;
+  if(relaxed.length){ relaxNote.hidden=false; relaxNote.innerHTML=buildRelaxMessage(relaxed); }
+  celebrate();
+  resultsCard.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function tag(text,type=''){ return `<span class="tag ${type}">${text}</span>`; }
+function card(b){
+  const reg = tag('🏛️ '+b.regulator);
+  const tax = tag('🧾 Steuer: '+humanTax(b.tax), b.tax==='yes'?'ok':'');
+  const app = tag('📱 App: '+humanApp(b.mobileApp));
+  const market = tag('🌍 '+humanMarket(b.marketplaces));
+  const prod = tag('📦 '+humanProducts(b.products));
+  const whyList = b._why.slice(0,3).map(x=>{
+    const icon = x.ok ? '✅' : (x.pts<0 ? '❌' : '⚠️');
+    const pts = (x.pts>0?'+':'') + Math.round(x.pts);
+    const note = x.note?` <span class="tag">${x.note}</span>`:'';
+    return `<li>${icon} ${x.label} <strong>${pts}</strong>${note}</li>`;
+  }).join('');
+  const f = `
+    <ul class="features">
+      <li><span class="ico">📦</span><span>Produkte: ${humanProducts(b.products) || '—'}</span></li>
+      <li><span class="ico">🏛️</span><span>Aufsicht: ${b.regulator}</span></li>
+      <li><span class="ico">🧾</span><span>Steuer: ${humanTax(b.tax)}</span></li>
+      <li><span class="ico">📱</span><span>App: ${humanApp(b.mobileApp)}</span></li>
+      <li><span class="ico">🌍</span><span>Märkte: ${humanMarket(b.marketplaces)}</span></li>
+      <li><span class="ico">🕘</span><span>Support: ${humanSupport(b.support)}</span></li>
+      <li><span class="ico">💳</span><span>Zahlung: ${humanPay(b.paymentMethods)}</span></li>
+    </ul>`;
+  return `
+    <article class="rcard">
+      <img class="logo" src="${b.logo}" alt="${b.name} Logo" onerror="this.src='https://dummyimage.com/80x80/ffffff/cccccc&text=%20'">
+      <div>
+        <h4 class="rname">${b.name}</h4>
+        <p class="rdesc">${b.description}</p>
+        <div class="tags">${reg}${tax}${app}${market}${prod}</div>
+        ${f}
+        <ul class="why">${whyList}</ul>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <div class="score">${b._score}%</div>
+        <a class="cta" href="${b.affiliateLink}" target="_blank" rel="nofollow sponsored noopener">Zum Anbieter</a>
+      </div>
+    </article>`;
+}
+
+// ---- Init ----
+function init(){ renderStepper(); renderQuestion(); gainXP(); }
+init();
+
+// ---- Upward Confetti (from bottom to top) ----
+function celebrate(){
+  const canvas=document.getElementById('confetti'); const ctx=canvas.getContext('2d');
+  const W=canvas.width=window.innerWidth; const H=canvas.height=window.innerHeight;
+  const N=70;
+  const pieces=Array.from({length:N},()=>({x:Math.random()*W,y:H+20+Math.random()*H*.3,r:3+Math.random()*4,c:`hsl(${Math.random()*360},80%,60%)`,s:1+Math.random()*2,a:Math.random()*Math.PI*2,life:1}));
+  let t=0;
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    pieces.forEach(p=>{
+      p.y -= p.s*2.6;           // move up
+      p.x += Math.sin((t+p.a)/10)*1.6; // gentle sway
+      p.life -= 0.008;          // fade
+      ctx.globalAlpha = Math.max(0,p.life);
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.c;
+      ctx.fill();
+      ctx.globalAlpha=1;
+    });
+    t++;
+    if(t<160) requestAnimationFrame(draw); else ctx.clearRect(0,0,W,H);
+  })();
+}
 </script>
-
-               
-<footer style="text-align:center; margin: 2rem 0; font-size: 0.9rem; color: #555;">
-  <p>Affiliate-Hinweis: Diese Webseite enthält Affiliate-Links. Beim Kauf über diese Links erhalten wir eine Provision, ohne dass für Sie zusätzliche Kosten entstehen.</p>
 </body>
 </html>
